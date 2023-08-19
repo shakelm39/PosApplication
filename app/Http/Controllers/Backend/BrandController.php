@@ -26,7 +26,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('backend.brand.create');
+        //
     }
 
     /**
@@ -37,18 +37,24 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
+        
+
         $request->validate([
-            'name' =>'required'
+            'name' =>'required|unique:brands'
         ],
         [
-            'name.required'=>['Brand Name required']
+            'name.required'=>['Brand Name required'],
+            'name.unique'=>['Brand Name already exists'],
         ]);
 
         $brand = new Brand();
         $brand->name = $request->name;
         $brand->save();
 
-        return redirect()->back()->with('success','Successfully Brand created');
+        return response()->json([
+            'status'=>'success',
+        ]);
+        
     }
 
     /**

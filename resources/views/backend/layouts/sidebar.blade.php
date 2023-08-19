@@ -6,7 +6,7 @@
         </li>
         <li><a><i class="fa fa-clone"></i>Brands <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-                <li><a href="{{route('brands.create')}}">Add Brand</a></li>
+               
                 <li><a href="{{route('brands.index')}}">View Brand</a></li>
             </ul>
         </li>

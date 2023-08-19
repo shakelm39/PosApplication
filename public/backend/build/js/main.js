@@ -192,7 +192,6 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $(document).on("click", ".addeventmore", function () {
-       
         var date = $("#date").val();
         var purchase_no = $("#purchase_no").val();
         var brand_id = $("#brand_id").val();
@@ -289,55 +288,51 @@ $(document).ready(function () {
     }
 });
 
+$(document).ready(function () {
+    $("#brandFrom").submit(function (e) {
+        e.preventDefault();
+        var formData = $("#brandFrom").serialize();
+        //console.log(formData);
+         $.ajax({
+            url: 'store',
+            type: "post",
 
+            data: formData,
 
- 
-       
+           success: function (data) {
+             if(data.status == 'success'){
+               $('#brandFrom')[0].reset();
+                $('.table').load(location.herf+' .table');
+                Command: toastr["success"](
+                    "Brand name successfully added"
+                );
 
- // form validation
+                toastr.options = {
+                    closeButton: false,
+                    debug: false,
+                    newestOnTop: false,
+                    progressBar: false,
+                    positionClass: "toast-top-right",
+                    preventDuplicates: false,
+                    onclick: null,
+                    showDuration: "300",
+                    hideDuration: "1000",
+                    timeOut: "5000",
+                    extendedTimeOut: "1000",
+                    showEasing: "swing",
+                    hideEasing: "linear",
+                    showMethod: "fadeIn",
+                    hideMethod: "fadeOut",
+                };
+            }
 
-  $(function () {
-    $.validator.setDefaults({
-      submitHandler: function () {
-        alert( "Form successful submitted!" );
-      }
+           },
+           error:function(err){
+            let error = err.responseJSON;
+            $.each(error.errors, function (key, value){
+                alert(key + ': ' + value);
+            });
+           }
+        });
     });
-    $('#myForm').validate({
-      rules: {
-        estimated_amount: {
-          required: true,
-          estimated_amount: true
-        },
-        supplier_id: {
-          required: true,
-          supplier_id: true
-        },
-        brand_id: {
-          required: true,
-          brand_id: true
-        }, 
-        category_id: {
-          required: true,
-          category_id: true
-        },
-        unit_id: {
-          required: true,
-          unit_id: true
-        }
-      },
-      messages: {
-        
-      },
-      errorElement: 'span',
-      errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
-      },
-      highlight: function (element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-      },
-      unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-      }
-    });
-  });
+});
