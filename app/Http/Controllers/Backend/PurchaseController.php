@@ -8,12 +8,11 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Purchase;
 use App\Models\Supplier;
-use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
 
 class PurchaseController extends Controller
 {
