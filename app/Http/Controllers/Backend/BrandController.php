@@ -37,23 +37,23 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        
+       
+       $request->validate([
+        'name' =>'required|unique:brands',
+       ],[
+        'name.required'=>'Brand Name required',
+        'name.unique'=>'Brand name already exists'
+       ]); 
 
-        $request->validate([
-            'name' =>'required|unique:brands'
-        ],
-        [
-            'name.required'=>['Brand Name required'],
-            'name.unique'=>['Brand Name already exists'],
-        ]);
+       $brand = new Brand();
+       $brand->name = $request->name;
+       $brand->save();
 
-        $brand = new Brand();
-        $brand->name = $request->name;
-        $brand->save();
+       return response()->json([
+        'status'=>'success',
+       ]);
 
-        return response()->json([
-            'status'=>'success',
-        ]);
+      //return redirect()->route('brands.index')->with('success', 'Brand successfully added');
         
     }
 
@@ -74,11 +74,13 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $brand = Brand::find($id);
-
-        return view('backend.brand.edit',['brand' => $brand]);
+        $data = Brand::find($request->brandUpId);
+       
+        return response()->json([
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -90,18 +92,17 @@ class BrandController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
-            'name' =>'required'
-        ],
-        [
-            'name.required'=>['Brand Name required']
-        ]);
-
-        $brand = Brand::find($request->id);
-        $brand->name = $request->name;
+        
+        $brand = Brand::find($request->brand_update_id);
+        $brand->name = $request->update_name;
+        $brand->status = $request->update_status;
+        
         $brand->update();
 
-        return redirect()->route('brands.index')->with('success','Successfully Brand Updated');
+        return response()->json([
+            'status' => 'success'
+        ]);
+        
     }
 
     /**
@@ -110,11 +111,14 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $brand = Brand::find($id);
+        $brand = Brand::find($request->id);
 
         $brand->delete();
-        return redirect()->back()->with('success','Data Deleted Successfully');
+
+        return response()->json([
+            'status' => 'success'
+        ]);
     }
 }

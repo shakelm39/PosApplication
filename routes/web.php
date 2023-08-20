@@ -111,7 +111,7 @@ Route::group(['middleware'=>'auth'],function(){
 		Route::post('/store', 		[CategoryController::class,'store'])->name('categories.store');
 		Route::get('/edit/{id}', 	[CategoryController::class,'edit'])->name('categories.edit');
 		Route::post('/update', 		[CategoryController::class,'update'])->name('categories.update');
-		Route::get('/delete/{id}', 	[CategoryController::class,'destroy'])->name('categories.delete');
+		Route::get('/delete', 		[CategoryController::class,'destroy'])->name('categories.delete');
 	});
 //Brands group
 	Route::prefix('brands')->group(function(){
@@ -119,9 +119,9 @@ Route::group(['middleware'=>'auth'],function(){
 		Route::get('/view',         [BrandController::class, 'index'])->name('brands.index');
 		Route::get('/add',          [BrandController::class, 'create'])->name('brands.create');
 		Route::post('/store',       [BrandController::class, 'store'])->name('brands.store');
-		Route::get('/edit/{id}',    [BrandController::class, 'edit'])->name('brands.edit');
+		Route::get('/edit',    		[BrandController::class, 'edit'])->name('brands.edit');
 		Route::post('/update', 		[BrandController::class, 'update'])->name('brands.update');
-		Route::get('/delete/{id}',  [BrandController::class, 'destroy'])->name('brands.delete');
+		Route::get('/delete',  		[BrandController::class, 'destroy'])->name('brands.delete');
 	});
 
 //Products group

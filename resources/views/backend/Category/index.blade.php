@@ -5,81 +5,120 @@
         <div class="">
             <div class="page-title">
                 <div class="title_left">
-                    
+                    <h3>Category List</h3>
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="row">
-                <div class="col-md-8 col-sm-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="text-center">Category List</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Category Name</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($categories as $key=> $category)
-                                    <tr>
-                                        <th>{{$key+1}}</th>
-                                        <td>{{$category->name}}</td>
-                                        <td>
-                                            
-                                            <a href="{{route('categories.edit',$category->id)}}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
-                                            <a href="{{route('categories.delete',$category->id)}}" id="delBtn" onclick="return confirm('Are you sure to delete this data?')"  class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="text-center fw-bold">Add Category</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                @if(session('success'))
-                                <span class="text-success mb-4"><strong>{{ session('success') }}</strong></span>
-                                @endif
-                                <form action="{{route('categories.store')}}" method="POST">
-                                    @csrf
-                                    
+                <div class="col-md-12 col-sm-12 ">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <br />
+                            <div class="col-md-8">
+                                <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap catTbl" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl</th>
+                                            <th>Category Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="name" class="form-control" id="category" placeholder="Enter Category">
-                                                <span>
-                                                @error('name')
-                                                    <span class="text-danger py-2">{{ $message }}</span>
-                                                @enderror
-
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="submit" class="btn btn-primary" id="cat_btn" >Add Category</button></td>
-                                        </tr>
+                                        @foreach($categories as $key => $category)
+                                            <tr>
+                                                <td>{{$key+1}}</td>
+                                                <td>{{$category->name}}</td>
+                                                <td>
+                                                    @if($category->status==1)
+                                                        <span class="badge badge-success p-2"><strong>Published</strong></span>
+                                                    @else
+                                                    <span class="badge badge-warning p-2"><strong>Pending</strong></span>
+                                                    @endif
+                                                </td>
+                                                     <td>
+                                                        <button type="button" title="edit" data-id="{{$category->id}}" class="btn btn-sm btn-primary catEditBtn"><i class="fa fa-edit"></i></button>
+                                                
+                                                        <button type="button" title="delete"  data-id="{{$category->id}}"  class="btn btn-sm btn-danger catDelBtn"><i class="fa fa-trash"></i></button>
+                                                    
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
-                                </form>
-                            </table>
+                                </table>
+                            </div>
+                            <!-- add form  -->
+                            <div class="col-md-4 catAddFrom">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Add Category</h4>
+                                    </div>
+                                    <div class="card-body">
+                                            <!--                                         
+                                            @if(session('success'))
+                                                <div class="alert alert-success">{{session('success')}}</div>
+                                            @endif -->
+                                        <div class="errorMsg"></div>
+                                        <form id="catFrom"  method="POST">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="name">Category Name</label>
+                                                <input type="text" id="name" class="form-control" name="name">
+                                                <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-info" id="add_cat">Add Category</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+
+                            <!-- update form  -->
+                            <div class="col-md-4 catupdateFrom">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Update Category</h4>
+                                    </div>
+                                    <div class="card-body">
+                                            <!--                                         
+                                            @if(session('success'))
+                                                <div class="alert alert-success">{{session('success')}}</div>
+                                            @endif -->
+                                        
+                                        <form id="update_cat_form">
+                                            @csrf
+                                            <input type="hidden" id="cat_update_id" name="cat_update_id">
+                                            <div class="form-group">
+                                                <label for="name">Category Name</label>
+                                                <input type="text" id="update_name" class="form-control" name="update_name">
+                                                <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <select name="update_status" id="update_status" class="form-control">
+                                                    <option value="0">Pending</option>
+                                                    <option value="1">Published</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-info" id="catUpdateId">Update Category</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+                            <!-- update form  -->
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+       
     </div>
-
     
 <!-- /page content -->
 @endsection

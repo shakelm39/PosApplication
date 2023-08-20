@@ -20,6 +20,7 @@
                                         <tr>
                                             <th>Sl</th>
                                             <th>Brand Name</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -28,10 +29,17 @@
                                             <tr>
                                                 <td>{{$key+1}}</td>
                                                 <td>{{$brand->name}}</td>
-                                                    
-                                                        <td><a title="edit" href="{{route('brands.edit',$brand->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                                <td>
+                                                    @if($brand->status==1)
+                                                        <span class="badge badge-success p-2"><strong>Published</strong></span>
+                                                    @else
+                                                    <span class="badge badge-warning p-2"><strong>Pending</strong></span>
+                                                    @endif
+                                                </td>
+                                                     <td>
+                                                        <button type="button" title="edit" data-id="{{$brand->id}}" class="btn btn-sm btn-primary brandEditBtn"><i class="fa fa-edit"></i></button>
                                                 
-                                                        <a title="delete" onclick="return confirm('Are you sure to delete this data?')" id="delete" href="{{route('brands.delete',$brand->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                                        <button type="button" title="delete"  data-id="{{$brand->id}}"  class="btn btn-sm btn-danger brandDelBtn"><i class="fa fa-trash"></i></button>
                                                     
                                                 </td>
                                             </tr>
@@ -39,18 +47,18 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 BrandAddFrom">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>Add Brand</h4>
                                     </div>
                                     <div class="card-body">
-                                        
+                                            <!--                                         
                                             @if(session('success'))
                                                 <div class="alert alert-success">{{session('success')}}</div>
-                                            @endif
-                                        
-                                        <form id="brandFrom">
+                                            @endif -->
+                                        <div class="errorMsg"></div>
+                                        <form id="brandFrom"  method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <label for="name">Brand Name</label>
@@ -65,12 +73,50 @@
                                 </div>
                                        
                             </div>
+
+                            <!-- update form  -->
+                            <div class="col-md-4 BrandupdateFrom">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Update Brand</h4>
+                                    </div>
+                                    <div class="card-body">
+                                            <!--                                         
+                                            @if(session('success'))
+                                                <div class="alert alert-success">{{session('success')}}</div>
+                                            @endif -->
+                                        
+                                        <form id="update_brand_form">
+                                            @csrf
+                                            <input type="hidden" id="brand_update_id" name="brand_update_id">
+                                            <div class="form-group">
+                                                <label for="name">Brand Name</label>
+                                                <input type="text" id="update_name" class="form-control" name="update_name">
+                                                <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <select name="update_status" id="update_status" class="form-control">
+                                                    <option value="0">Pending</option>
+                                                    <option value="1">Published</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-info" id="update_brand">Update Brand</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+                            <!-- update form  -->
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+       
     </div>
     
 <!-- /page content -->

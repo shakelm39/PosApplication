@@ -50,7 +50,9 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect()->back()->with('success','Catetory successfully created.');
+        return response()->json([
+            'status'=>'success'
+        ]);
             
     }
 
@@ -109,10 +111,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $category = Category::find($id);
+        //dd($request->all());
+        $category = Category::find($request->catDelId);
         $category->delete();
-        return redirect()->back()->with('success', 'Category deleted successfully');
+        return response()->json([
+            'status' => 'success'
+        ]);
     }
 }

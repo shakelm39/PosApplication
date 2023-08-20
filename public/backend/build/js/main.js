@@ -101,7 +101,7 @@ $(document).ready(function () {
     $("#supEditFrom").on("submit", function (e) {
         e.preventDefault();
         var data = $(".updateFrom").serialize();
-        console.log(data);
+       
         $.ajax({
             url: "update",
             method: "POST",
@@ -288,51 +288,267 @@ $(document).ready(function () {
     }
 });
 
-$(document).ready(function () {
-    $("#brandFrom").submit(function (e) {
+// Brand Add ajax request
+$(document).ready(function() {
+    $('.BrandupdateFrom').hide();
+
+    $('#add_brand').on('click', function(e){
         e.preventDefault();
-        var formData = $("#brandFrom").serialize();
-        //console.log(formData);
-         $.ajax({
-            url: 'store',
-            type: "post",
 
-            data: formData,
+        var name = $('#name').val();
+        $.ajax({
+            url: "store",
+            type: 'POST',
+            data: {
+                name: name
+            },
+            success: function(data){
+                if(data.status == 'success'){
+                    Command: toastr["success"](
+                        "Brand data successfully added"
+                    );
 
-           success: function (data) {
-             if(data.status == 'success'){
-               $('#brandFrom')[0].reset();
-                $('.table').load(location.herf+' .table');
-                Command: toastr["success"](
-                    "Brand name successfully added"
-                );
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: false,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                    };
+                    $('#brandFrom')[0].reset();
+                    $('.table').load(location.href+' .table');
 
-                toastr.options = {
-                    closeButton: false,
-                    debug: false,
-                    newestOnTop: false,
-                    progressBar: false,
-                    positionClass: "toast-top-right",
-                    preventDuplicates: false,
-                    onclick: null,
-                    showDuration: "300",
-                    hideDuration: "1000",
-                    timeOut: "5000",
-                    extendedTimeOut: "1000",
-                    showEasing: "swing",
-                    hideEasing: "linear",
-                    showMethod: "fadeIn",
-                    hideMethod: "fadeOut",
-                };
-            }
+                }
 
-           },
-           error:function(err){
-            let error = err.responseJSON;
-            $.each(error.errors, function (key, value){
-                alert(key + ': ' + value);
-            });
-           }
+            },
+            error: function (err) {
+                let error = err.responseJSON;
+                $.each(error.errors, function (index, val) {
+                    $(".errorMsg").append(
+                        '<span class="text-danger">' + val + "</span>" + "<br>"
+                    );
+                });
+            },
         });
     });
+
+// edit ajax request
+
+    $(document).on('click','.brandEditBtn',function(e){
+        e.preventDefault();
+        $('.BrandAddFrom').hide();
+        $('.BrandupdateFrom').show();
+        var brandUpId = $(this).data('id');
+        
+        $.ajax({
+            url:'edit',
+            type:'get',
+            data:{brandUpId:brandUpId},
+            success: function(response){
+                if(response){
+                    $('#brand_update_id').val(response.data.id);
+                    $('#update_name').val(response.data.name);
+                    $('#update_name').val(response.data.name);
+                    $('select[name="update_status"]').val(response.data.status);
+
+                    if (response.data.status == 1) {
+                        //1 means published
+                        $("#update_status").find(":selected").val(response.data.status);
+                    } else {
+                        $("#update_status").find(":selected").val(response.data.status);
+                    }
+                }
+            }
+        });
+    })
+
+    //Ajax Update request
+
+        $('#update_brand').on('click',function(e){
+            e.preventDefault();
+           
+          var brandUpDateFrom = $('#update_brand_form').serialize();
+
+          $.ajax({
+            url:'update',
+            type:'post',
+            data: brandUpDateFrom,
+            success: function(res){
+                if(res.status=='success'){
+                    Command: toastr["success"](
+                        "Brand data successfully Updated!!"
+                    );
+
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: false,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                    };
+                    $('#update_brand_form')[0].reset();
+                    $('#datatable-responsive').load(location.href+' #datatable-responsive');
+                    $('.BrandAddFrom').show();
+                    $('.BrandupdateFrom').hide();
+                }
+            }
+          });
+
+            
+        });
+
+
+    //delte ajax request
+    $(document).on('click','.brandDelBtn', function(){
+        var id = $(this).data('id');
+        $.ajax({
+            url:'delete',
+            type: 'get',
+            data:{ id:id},
+            success: function(data){
+                if(data.status == 'success'){
+                    Command: toastr["warning"](
+                        "Brand data successfully deleted!!"
+                    );
+
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: false,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                    };
+                    
+                    $('.table').load(location.href+' .table'); 
+                }
+            }
+        })
+    });
+
+});
+
+
+//Category Ajax request
+
+$(document).ready(function(){
+
+    $('.catupdateFrom').hide();
+    //add category request
+    $('#catFrom').on('submit',function(e){
+        e.preventDefault();
+        const caTform = $('#catFrom').serialize();
+
+        $.ajax({
+            url:'store',
+            type:'POST',
+            data:caTform,
+            success:function(res){
+                if(res.status == 'success'){
+                    Command: toastr["success"](
+                        "Category data successfully Added!!"
+                    );
+
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: false,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                    };
+                    $('#catFrom')[0].reset();
+                    $('.catTbl').load(location.href+' .catTbl');
+
+                }
+            },
+            error: function (err) {
+                let error = err.responseJSON;
+                $.each(error.errors, function (index, val) {
+                    $(".errorMsg").append(
+                        '<span class="text-danger">' + val + "</span>" + "<br>"
+                    );
+                });
+            }
+        });
+    })
+
+
+    //delete category request
+
+    $(document).on('click','.catDelBtn', function(e){
+        e.preventDefault();
+        var catDelId = $(this).data('id');
+
+        $.ajax({
+            url: 'delete',
+            type: 'get',
+            data: {catDelId: catDelId},
+            success:function (data) {
+                if(data.status === 'success'){
+                    Command: toastr["warning"](
+                        "Category data successfully Deleted!!"
+                    );
+                    
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: false,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        timeOut: "5000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                    };
+                    
+                    $('.catTbl').load(location.href+' .catTbl');
+                }
+            }
+        });
+    })
 });
