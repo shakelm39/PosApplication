@@ -2,84 +2,46 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class StockController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+   //Product Stock View
+   public function stockReport(){
+
+    $allData = Product::orderBy('supplier_id','asc')->orderBy('category_id','asc')->get();
+    return view('backend.stock.stock-report',compact('allData'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function stockReportPdf(){
+        $data['allData'] = Product::orderBy('supplier_id','asc')->orderBy('category_id','asc')->get();
+        $pdf = PDF::loadView('backend.pdf.stock-report-pdf', $data);
+        $pdf->SetProtection(['copy', 'print'], '', 'pass');
+        return $pdf->stream('document.pdf');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function supplierProductWise(){
+        $data['suppliers'] = Supplier::all();
+        $data['categories']= Category::all();
+        $data['brands']= Brand::all();
+        return view('backend.stock.supplier-product-wise-report',$data);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function supplierWisePdf(Request $request){
+        $data['allData'] = Product::orderBy('supplier_id','asc')->orderBy('category_id','asc')->where('supplier_id',$request->supplier_id)->get();
+        $pdf = PDF::loadView('backend.pdf.supplier-wise-stock-report-pdf', $data);
+        $pdf->SetProtection(['copy', 'print'], '', 'pass');
+        return $pdf->stream('document.pdf');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function productWisePdf(Request $request){
+        $data['product'] = Product::where('category_id',$request->category_id)->where('id',$request->product_id)->first();
+        $pdf = PDF::loadView('backend.pdf.product-wise-stock-report-pdf', $data);
+        $pdf->SetProtection(['copy', 'print'], '', 'pass');
+        return $pdf->stream('document.pdf');
     }
 }

@@ -69,14 +69,15 @@
 										</div>
 										</div>
 										<div class="form-group col-md-6">
-										<img id="showImage" src="{{(!empty($editData->image))?url('public/upload/user_images/'.$editData->image):url('public/upload/no_image.jpg')}}" alt="" style="width: 150px;height: 160px;border:1px solid #000;">
+											<img id="showImage" src="{{(!empty($editData->image))?url('public/upload/user_images/'.$editData->image):url('public/upload/no_image.jpg')}}" alt="" style="width: 150px;height: 160px;border:1px solid #000;">
+										</div>
+										<div class="form-group">
+											<button type="submit" class="btn btn-primary">Update</button>
 										</div>
 									</div>
 									<!-- /.card-body -->
 
-									<div class="card-footer">
-										<button type="submit" class="btn btn-primary">Update</button>
-									</div>
+									
 								</form>
 									<!-- formend -->
 								</div><!-- /.card-body -->

@@ -35,12 +35,15 @@
                                                     @else
                                                     <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                     @endif
-                                                </td>
+                                                </td> 
+                                                    @php
+                                                        $count_brand = App\Models\Product::where('brand_id',$brand->id)->count();
+                                                    @endphp
                                                      <td>
                                                         <button type="button" title="edit" data-id="{{$brand->id}}" class="btn btn-sm btn-primary brandEditBtn"><i class="fa fa-edit"></i></button>
-                                                
+                                                    @if($count_brand<1)
                                                         <button type="button" title="delete"  data-id="{{$brand->id}}"  class="btn btn-sm btn-danger brandDelBtn"><i class="fa fa-trash"></i></button>
-                                                    
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

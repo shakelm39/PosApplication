@@ -10,6 +10,7 @@
                 <li><a href="{{route('profiles.password.view')}}">Change Password</a></li>
             </ul>
         </li>
+        @if(Auth::user()->usertype=='admin')
         <li><a><i class="fa fa-clone"></i>Users <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
                 <li><a href="{{route('users.index')}}">View User</a></li>
@@ -47,6 +48,22 @@
                 <li><a href="{{route('purchase.report')}}">Daily Purchase Report</a></li>
             </ul>
         </li>
+        <li><a><i class="fa fa-clone"></i>Manage Invoice <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{{route('invoice.pending.list')}}">Approval Invoice</a></li>
+                <li><a href="{{route('invoice.print.list')}}">Print Invoice</a></li>
+                <li><a href="{{route('invoice.daily.report')}}">Daily Invoice Report</a></li>
+                
+            </ul>
+        </li>
+        <li><a><i class="fa fa-clone"></i>Manage Stock <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{{route('stock.report')}}">Stock Report</a></li>
+                <li><a href="{{route('stock.report.supplier.product.wise')}}">Supplier/Product Wise</a></li>
+                
+            </ul>
+        </li>
+        @endif
     </ul>
     </div>
 </div>

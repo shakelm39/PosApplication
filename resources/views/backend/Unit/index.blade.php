@@ -36,10 +36,14 @@
                                                     <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                     @endif
                                                 </td>
-                                                     <td>
-                                                        <button type="button" title="edit" data-id="{{$unit->id}}" class="btn btn-sm btn-primary unitEditBtn"><i class="fa fa-edit"></i></button>
-                                                
-                                                        <button type="button" title="delete"  data-id="{{$unit->id}}"  class="btn btn-sm btn-danger unitDelBtn"><i class="fa fa-trash"></i></button>
+                                                @php
+                                                    $count_unit = App\Models\Product::where('unit_id',$unit->id)->count();
+                                                @endphp
+                                                <td>
+                                                    <button type="button" title="edit" data-id="{{$unit->id}}" class="btn btn-sm btn-primary unitEditBtn"><i class="fa fa-edit"></i></button>
+                                                    @if($count_unit<1)
+                                                    <button type="button" title="delete"  data-id="{{$unit->id}}"  class="btn btn-sm btn-danger unitDelBtn"><i class="fa fa-trash"></i></button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

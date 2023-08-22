@@ -36,11 +36,14 @@
                                                     <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                     @endif
                                                 </td>
+                                                @php
+                                                    $count_category = App\Models\Product::where('category_id',$category->id)->count();
+                                                @endphp
                                                      <td>
                                                         <button type="button" title="edit" data-id="{{$category->id}}" class="btn btn-sm btn-primary catEditBtn"><i class="fa fa-edit"></i></button>
-                                                
+                                                    @if($count_category<1)
                                                         <button type="button" title="delete"  data-id="{{$category->id}}"  class="btn btn-sm btn-danger catDelBtn"><i class="fa fa-trash"></i></button>
-                                                    
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

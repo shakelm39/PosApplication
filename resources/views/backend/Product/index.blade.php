@@ -14,10 +14,10 @@
                     <div class="x_panel">
                         <div class="x_content">
                            <div class="text-center">
-                                @if(session('success'))
+                                <!-- @if(session('success'))
                                    <span class="alert alert-success">{{session('success')}}</span>
                                   
-                                @endif
+                                @endif -->
                            </div>
                             <br />
                             <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">Add Product</button>
@@ -42,11 +42,13 @@
                                             <td>{{$product['category']['name']}}</td>
                                             <td>{{$product->name}}</td>
                                             <td>{{$product['unit']['name']}}</td>
-                                
+                                            @php
+                                                $count_product = App\Models\Purchase::where('product_id',$product->id)->count();
+                                            @endphp
                                             <td><a title="edit" href="{{route('products.edit',$product->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                    
-                                            <a title="delete" onclick="return confirm('Are you sure to delte this data?')" id="delete" href="{{route('products.delete',$product->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                
+                                            @if($count_product<1)
+                                                <a title="delete" onclick="return confirm('Are you sure to delte this data?')" id="delete" href="{{route('products.delete',$product->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                            @endif
                                             </td>
                                         </tr>
                                     @endforeach

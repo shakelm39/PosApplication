@@ -42,9 +42,14 @@
                                                     <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                 @endif
                                             </td>
+                                            @php
+                                                $count_supplier = App\Models\Product::where('supplier_id',$supplier->id)->count();
+                                            @endphp
                                             <td>
                                                 <button type="button" data-id="{{$supplier->id}}" class="btn btn-sm btn-success supEditBtn"><i class="fa fa-edit"></i></button>
-                                                <button type="button" data-id="{{$supplier->id}}" class="btn btn-sm btn-danger supDelBtn"><i class="fa fa-trash"></i></button>
+                                                @if($count_supplier<1)
+                                                 <button type="button" data-id="{{$supplier->id}}" class="btn btn-sm btn-danger supDelBtn"><i class="fa fa-trash"></i></button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

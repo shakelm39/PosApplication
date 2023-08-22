@@ -45,7 +45,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>SPK Electronics!</span></a>
+              <a href="{{url('/dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>SPK Electronics!</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -53,10 +53,10 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{asset('public/backend')}}/images/img.jpg" alt="Profile Pic" class="img-circle profile_img">
+                <img src="{{(!empty(Auth::user()->image))?url('public/upload/user_images/'.Auth::user()->image):url('public/upload/no_image.jpg')}}" alt="Profile Pic" class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
+                <span>Welcome,</span><span class="text-uppercase text-bold">( {{(Auth::user()->usertype)}} )</span>
                 <h2>{{Auth::user()->name}}</h2>
               </div>
             </div>
@@ -79,7 +79,7 @@
               <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -97,12 +97,12 @@
               <ul class=" navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="{{asset('public/backend')}}/images/img.jpg" alt="">{{Auth::user()->name}}
+                    <img src="{{(!empty(Auth::user()->image))?url('public/upload/user_images/'.Auth::user()->image):url('public/upload/no_image.jpg')}}" alt="User profile picture" >{{Auth::user()->name}}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item"  href="javascript:;"> Profile</a>
-                      <a class="dropdown-item"  href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
+                    <a class="dropdown-item"  href="{{route('profiles.view')}}"> Profile</a>
+                      <a class="dropdown-item"  href="{{route('profiles.password.view')}}">
+                        <!-- <span class="badge bg-red pull-right">50%</span> -->
                         <span>Settings</span>
                       </a>
                   <a class="dropdown-item"  href="javascript:;">Help</a>

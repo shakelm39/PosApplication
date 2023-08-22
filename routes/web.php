@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\StockController;
 use App\Http\Controllers\Backend\DefaultController;
+use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\CategoryController;
@@ -30,11 +32,11 @@ Route::get('/dashboard', function () {
     return view('backend.layouts.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
 require __DIR__.'/auth.php';
 
@@ -152,32 +154,30 @@ Route::group(['middleware'=>'auth'],function(){
 	});
 
 	//Invoice group
-	// Route::prefix('invoice')->group(function(){
+	Route::prefix('invoice')->group(function(){
 
-	// 	Route::get('/view', 'Backend\InvoiceController@view')->name('invoice.view');
-	// 	Route::get('/add', 'Backend\InvoiceController@add')->name('invoice.add');
-	// 	Route::post('/store', 'Backend\InvoiceController@store')->name('invoice.store');
-	// 	Route::get('/pending', 'Backend\InvoiceController@pendingList')->name('invoice.pending.list');
-	// 	Route::get('/approve/{id}', 'Backend\InvoiceController@approve')->name('invoice.approve');
-	// 	Route::get('/delete/{id}', 'Backend\InvoiceController@delete')->name('invoice.delete');
-	// 	Route::post('/approve/store/{id}', 'Backend\InvoiceController@approvalStore')->name('approval.store');
-	// 	Route::get('/print/list', 'Backend\InvoiceController@printInvoiceList')->name('invoice.print.list');
-	// 	Route::get('/print/{id}', 'Backend\InvoiceController@printInvoice')->name('invoice.print');
-	// 	Route::get('/daily/report', 'Backend\InvoiceController@dailyReport')->name('invoice.daily.report');
-	// 	Route::get('/daily/report/pdf', 'Backend\InvoiceController@dailyReportPdf')->name('invoice.daily.report.pdf');
+		Route::get('/view', 				[InvoiceController::class,'view'])->name('invoice.view');
+		Route::get('/add', 					[InvoiceController::class,'add'])->name('invoice.add');
+		Route::post('/store', 				[InvoiceController::class,'store'])->name('invoice.store');
+		Route::get('/pending', 				[InvoiceController::class,'pendingList'])->name('invoice.pending.list');
+		Route::get('/approve/{id}', 		[InvoiceController::class,'approve'])->name('invoice.approve');
+		Route::get('/delete/{id}', 			[InvoiceController::class,'delete'])->name('invoice.delete');
+		Route::post('/approve/store/{id}', 	[InvoiceController::class,'approvalStore'])->name('approval.store');
+		Route::get('/print/list', 			[InvoiceController::class,'printInvoiceList'])->name('invoice.print.list');
+		Route::get('/print/{id}', 			[InvoiceController::class,'printInvoice'])->name('invoice.print');
+		Route::get('/daily/report', 		[InvoiceController::class,'dailyReport'])->name('invoice.daily.report');
+		Route::get('/daily/report/pdf', 	[InvoiceController::class,'dailyReportPdf'])->name('invoice.daily.report.pdf');
 
-	// });
+	});
+
 	//Stock Management
-	// Route::prefix('stock')->group(function(){
-
-	// 	Route::get('/report', 'Backend\StockController@stockReport')->name('stock.report');
-	// 	Route::get('/report/pdf', 'Backend\StockController@stockReportPdf')->name('stock.report.pdf');
-	// 	Route::get('/report/supplier/product/wise', 'Backend\StockController@supplierProductWise')->name('stock.report.supplier.product.wise');
-	// 	Route::get('/report/supplier/wise/pdf', 'Backend\StockController@supplierWisePdf')->name('stock.report.supplier.wise.pdf');
-	// 	Route::get('/report/product/wise/pdf', 'Backend\StockController@productWisePdf')->name('stock.report.product.wise.pdf');
-		
-
-	// });
+	Route::prefix('stock')->group(function(){
+		Route::get('/report', 						[StockController::class,'stockReport'])->name('stock.report');
+		Route::get('/report/pdf', 					[StockController::class,'stockReportPdf'])->name('stock.report.pdf');
+		Route::get('/report/supplier/product/wise', [StockController::class,'supplierProductWise'])->name('stock.report.supplier.product.wise');
+		Route::get('/report/supplier/wise/pdf', 	[StockController::class,'supplierWisePdf'])->name('stock.report.supplier.wise.pdf');
+		Route::get('/report/product/wise/pdf', 		[StockController::class,'productWisePdf'])->name('stock.report.product.wise.pdf');
+	});
 	//Default controller
 	 Route::get('/get-category',[DefaultController::class,'getCategory'])->name('purchase.get-category');
 	 Route::get('/get-brand',	[DefaultController::class,'getBrand'])->name('purchase.get-brand');
