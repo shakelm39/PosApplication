@@ -37,9 +37,9 @@
                                             <td>{{$supplier->address}}</td>
                                             <td>
                                                 @if($supplier->status==1)
-                                                    <span class="badge badge-success"><strong>Published</strong></span>
+                                                    <span class="badge badge-success p-2"><strong>Published</strong></span>
                                                     @else
-                                                    <span class="badge badge-warning"><strong>Pending</strong></span>
+                                                    <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                 @endif
                                             </td>
                                             <td>
@@ -99,7 +99,7 @@
         </div>
         <!-- add modal end  -->
         
-        <!-- edit modal  -->
+        <!-- update modal  -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -144,5 +144,6 @@
                 </div>
             </div>
         </div>
+        <!--update modal end-->
 <!-- /page content -->
 @endsection

@@ -13,74 +13,111 @@
                 <div class="col-md-12 col-sm-12 ">
                     <div class="x_panel">
                         <div class="x_content">
-                            
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4>Unit Lists</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Sl</th>
-                                                        <th>Unit</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($units as $key=> $unit)
-                                                        <tr>
-                                                            <td>{{$key+1}}</td>
-                                                            <td>{{$unit->name}}</td>
-                                                                
-                                                            <td>
-                                                                <a title="edit" href="{{route('units.edit',$unit->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                                                
-                                                                <a title="delete" href="{{route('units.delete',$unit->id)}}" onclick="return confirm('Are you sure to delete this data?')" id="delete"  class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                                                
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4>Add Unit</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            
-                                                @if(session('success'))
-                                                    <div class="alert alert-success">{{session('success')}}</div>
-                                                @endif
-                                            
-                                            <form action="{{route('units.store')}}" method="POST" id="unitForm">
-                                                @csrf
-                                                <div class="form-group">
-                                                    <label for="unit">Unit Name</label>
-                                                    <input type="text" id="name" class="form-control" name="name">
-                                                    <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-info" id="unitBtn">Add Unit</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                            <br />
+                            <div class="col-md-8">
+                                <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap unitTbl" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl</th>
+                                            <th>Unit Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($units as $key => $unit)
+                                            <tr>
+                                                <td>{{$key+1}}</td>
+                                                <td>{{$unit->name}}</td>
+                                                <td>
+                                                    @if($unit->status==1)
+                                                        <span class="badge badge-success p-2"><strong>Published</strong></span>
+                                                    @else
+                                                    <span class="badge badge-warning p-2"><strong>Pending</strong></span>
+                                                    @endif
+                                                </td>
+                                                     <td>
+                                                        <button type="button" title="edit" data-id="{{$unit->id}}" class="btn btn-sm btn-primary unitEditBtn"><i class="fa fa-edit"></i></button>
+                                                
+                                                        <button type="button" title="delete"  data-id="{{$unit->id}}"  class="btn btn-sm btn-danger unitDelBtn"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            
+                            <div class="col-md-4 unitAddDiv">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Add Unit</h4>
+                                    </div>
+                                    <div class="card-body">
+                                            <!--                                         
+                                            @if(session('success'))
+                                                <div class="alert alert-success">{{session('success')}}</div>
+                                            @endif -->
+                                        <div class="errorMsg"></div>
+                                        <form id="unitAddFrom">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="name">Unit Name</label>
+                                                <input type="text" id="name" class="form-control" name="name">
+                                                <!-- <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span> -->
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-info" id="add_unit">Add Unit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+
+                            <!-- update form  -->
+                            <div class="col-md-4 unitupdateFrom">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Update Unit</h4>
+                                    </div>
+                                    <div class="card-body">
+                                            <!--                                         
+                                            @if(session('success'))
+                                                <div class="alert alert-success">{{session('success')}}</div>
+                                            @endif -->
+                                        
+                                        <form id="update_unit_form">
+                                            @csrf
+                                            <input type="hidden" id="unit_update_id" name="unit_update_id">
+                                            <div class="form-group">
+                                                <label for="name">Unit Name</label>
+                                                <input type="text" id="unitUpdateName" class="form-control" name="unitUpdateName">
+                                                <span class="text-danger mt-2">@error('name')<strong>{{$message}}</strong>@enderror</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <select name="unitUpdateStatus" id="unitUpdateStatus" class="form-control">
+                                                    <option value="0">Pending</option>
+                                                    <option value="1">Published</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-info" id="unitUpdateBtn">Update Unit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+                            <!-- update form  -->
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+       
     </div>
+    
 <!-- /page content -->
 @endsection

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -12,9 +14,11 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function view()
     {
-        //
+        $id = Auth::user()->id;
+    	$user = User::find($id);
+    	return view('backend.user.view-profile',compact('user'));
     }
 
     /**
@@ -55,9 +59,11 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $id = Auth::user()->id;
+		$editData = User::find($id);
+		return view('backend.user.edit-profile',compact('editData'));
     }
 
     /**
@@ -67,9 +73,23 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = User::find(Auth::user()->id);
+		$data->name = $request->name;
+		$data->email = $request->email;
+		$data->mobile = $request->mobile;
+		$data->address = $request->address;
+		$data->gender = $request->gender;
+		if ($request->file('image')) {
+			$file = $request->file('image');
+			@unlink(public_path('upload/user_images/'.$data->image));
+			$filename = date('YmdHi').$file->getClientOriginalName();
+			$file->move(public_path('upload/user_images'), $filename);
+			$data['image'] = $filename;
+		}
+		$data->save();
+		return redirect()->route('profiles.view')->with('success','Profile updated Successfully!');
     }
 
     /**
@@ -82,4 +102,21 @@ class ProfileController extends Controller
     {
         //
     }
+    //Password edit function
+	public function passwordView(){
+		return view('backend.user.edit-password');
+	}
+
+    //password update function
+	
+	public function passwordUpdate(Request $request){
+		if (Auth::attempt(['id'=>Auth::user()->id,'password'=>$request->current_password])) {
+			$user = User::find(Auth::user()->id);
+			$user->password = bcrypt($request->new_password);
+			$user->save();
+			return redirect()->route('profiles.view')->with('success','Password Successfully Changed');
+		}else{
+			return redirect()->back()->with('error','Sorry! Current Password does not Match');
+		}
+	}
 }

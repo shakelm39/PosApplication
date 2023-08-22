@@ -73,11 +73,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $category = Category::find($id);
+        
 
-        return view('backend.category.edit',['category' => $category]);
+        $category = Category::find($request->catEditId);
+        
+        return response()->json([
+            'category'=>$category,
+        ]);
     }
 
     /**
@@ -90,19 +94,22 @@ class CategoryController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' =>'required|unique:categories,name,'.$request->id,
+            'update_name' =>'required|unique:categories,name,'.$request->cat_update_id,
         ],
         [
-            'name.required' => 'Categories name missing',
-            'name.unique' => 'Categories already exists'
+            'update_name.required' => 'Categories name missing',
+            'update_name.unique' => 'Categories already exists'
             
         ]);
 
-        $category = Category::find($request->id);
-        $category->name = $request->name;
+        $category = Category::find($request->cat_update_id);
+        $category->name = $request->update_name;
+        $category->status = $request->update_status;
         $category->update();
 
-        return redirect()->route('categories.index')->with('success','Catetory successfully updated.');
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 
     /**

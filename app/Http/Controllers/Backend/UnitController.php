@@ -37,18 +37,22 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+
         $request->validate([
-            'name' =>['required','unique:units']
-        ],
-        [
-            'name.required' =>'Unit Name is required',
-            'name.unique' =>'Unit name already exists'
+            'name'=>'required|unique:units',
+        ],[
+            'name.required'=>'Unit Name required',
+            'name.unique'=>'Unit Name already exists'
         ]);
 
         $unit = new Unit();
-        $unit->name= $request->name;
+        $unit->name = $request->name;
         $unit->save();
-        return redirect()->back()->with('success','Unit saved successfully');
+
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 
     /**
@@ -68,11 +72,13 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $unit = Unit:: find($id);
+        $unit = Unit::findOrfail($request->id);
 
-        return view('backend.unit.edit',['unit' => $unit]);
+        return response()->json([
+            'unit'=>$unit,
+        ]);
     }
 
     /**
@@ -84,18 +90,15 @@ class UnitController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
-            'name' =>['required','unique:units,name,'.$request->id,]
-        ],
-        [
-            'name.required' =>'Unit Name is required',
-            'name.unique' =>'Unit name already exists'
-        ]);
+        $unit = Unit::findOrfail($request->unit_update_id);
 
-        $unit = Unit::find($request->id);
-        $unit->name= $request->name;
+        $unit->name = $request->unitUpdateName;
+        $unit->status = $request->unitUpdateStatus;
         $unit->update();
-        return redirect()->route('units.index')->with('success','Unit updated successfully');
+
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 
     /**
@@ -104,10 +107,12 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $unit = Unit::find($id);
+        $unit = Unit::findOrFail($request->id);
         $unit->delete();
-        return redirect()->back()->with('success', 'Data deleted successfully');
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Backend\UnitController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\DefaultController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\SupplierController;
@@ -40,26 +41,27 @@ require __DIR__.'/auth.php';
    // middleware
 Route::group(['middleware'=>'auth'],function(){
 
-	// //user group
-	// Route::prefix('users')->group(function(){
+	//user group
+	Route::prefix('users')->group(function(){
 
-	// 	Route::get('/view', 'Backend\UserController@view')->name('users.view');
-	// 	Route::get('/add', 'Backend\UserController@add')->name('users.add');
-	// 	Route::post('/store', 'Backend\UserController@store')->name('users.store');
-	// 	Route::get('/edit/{id}', 'Backend\UserController@edit')->name('users.edit');
-	// 	Route::post('/update/{id}', 'Backend\UserController@update')->name('users.update');
-	// 	Route::get('/delete/{id}', 'Backend\UserController@delete')->name('users.delete');
-	// });
+		Route::get('/view', 		[UserController::class,'index'])->name('users.index');
+		Route::get('/add', 			[UserController::class,'create'])->name('users.create');
+		Route::post('/store', 		[UserController::class,'store'])->name('users.store');
+		Route::get('/edit', 		[UserController::class,'edit'])->name('users.edit');
+		Route::post('/update', 		[UserController::class,'update'])->name('users.update');
+		Route::get('/delete', 		[UserController::class,'delete'])->name('users.delete');
 
-	// //profile group
-	// Route::prefix('profiles')->group(function(){
+	});
 
-	// 	Route::get('/view', 'Backend\ProfileController@view')->name('profiles.view');
-	// 	Route::get('/edit', 'Backend\ProfileController@edit')->name('profiles.edit');
-	// 	Route::post('/store', 'Backend\ProfileController@update')->name('profiles.update');
-	// 	Route::get('/password/view', 'Backend\ProfileController@passwordView')->name('profiles.password.view');
-	// 	Route::post('/password/update', 'Backend\ProfileController@passwordUpdate')->name('profiles.password.update');
-	// });
+	//profile group
+	Route::prefix('profiles')->group(function(){
+
+		Route::get('/view', 			[ProfileController::class,'view'])->name('profiles.view');
+		Route::get('/edit', 			[ProfileController::class,'edit'])->name('profiles.edit');
+		Route::post('/store', 			[ProfileController::class,'update'])->name('profiles.update');
+		Route::get('/password/view', 	[ProfileController::class,'passwordView'])->name('profiles.password.view');
+		Route::post('/password/update', [ProfileController::class,'passwordUpdate'])->name('profiles.password.update');
+	});
 
 	//Suppliers group
 	Route::prefix('suppliers')->group(function(){
@@ -98,9 +100,9 @@ Route::group(['middleware'=>'auth'],function(){
 		Route::get('/view', 		[UnitController::class, 'index'])->name('units.index');
 		Route::get('/add', 			[UnitController::class, 'create'])->name('units.create');
 		Route::post('/store', 		[UnitController::class, 'store'])->name('units.store');
-		Route::get('/edit/{id}', 	[UnitController::class, 'edit'])->name('units.edit');
+		Route::get('/edit', 		[UnitController::class, 'edit'])->name('units.edit');
 		Route::post('/update', 		[UnitController::class, 'update'])->name('units.update');
-		Route::get('/delete/{id}', 	[UnitController::class, 'destroy'])->name('units.delete');
+		Route::get('/delete', 		[UnitController::class, 'destroy'])->name('units.delete');
 	});
 	
 //Categories group
@@ -109,7 +111,7 @@ Route::group(['middleware'=>'auth'],function(){
 		Route::get('/view', 		[CategoryController::class,'index'])->name('categories.index');
 		Route::get('/add',  		[CategoryController::class,'create'])->name('categories.create');
 		Route::post('/store', 		[CategoryController::class,'store'])->name('categories.store');
-		Route::get('/edit/{id}', 	[CategoryController::class,'edit'])->name('categories.edit');
+		Route::get('/edit', 		[CategoryController::class,'edit'])->name('categories.edit');
 		Route::post('/update', 		[CategoryController::class,'update'])->name('categories.update');
 		Route::get('/delete', 		[CategoryController::class,'destroy'])->name('categories.delete');
 	});

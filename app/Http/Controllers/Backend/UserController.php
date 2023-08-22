@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $data['allData'] = User::all();
+   	    return view('backend.user.index',$data);
     }
 
     /**
@@ -35,7 +37,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $this->validate($request,[
+            'name'=>'required',
+            'email'=>'required|unique:users,email'
+        ]);
+        $data = new User();
+        $data->usertype = $request->usertype;
+        $data->name 	= $request->name;
+        $data->email 	= $request->email;
+        $data->password = bcrypt($request->password);
+        $data->save();
+
+        
+        return response()->json([
+            'status'=>'success',
+        ]);
     }
 
     /**
@@ -55,9 +72,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $user  = User::findOrFail($request->id);
+
+        return response()->json([
+            'user'=>$user,
+        ]);
     }
 
     /**
@@ -67,9 +88,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required',
+            'email'=>'required|unique:users,email,'.$request->userUpId,
+        ]);
+
+        $data = User::find($request->userUpId);
+        $data->usertype = $request->usertype;
+        $data->name    = $request->name;
+        $data->email   = $request->email;
+        $data->status   = $request->status;
+        $data->save();
+
+        return response()->json([
+            'status'=>'success'
+        ]);
     }
 
     /**
@@ -78,8 +113,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        $user  = User::findOrFail($request->id);
+        $user->delete();
+
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 }

@@ -4,9 +4,19 @@
     <ul class="nav side-menu">
         <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
         </li>
+        <li><a><i class="fa fa-clone"></i>Manage Profile <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{{route('profiles.view')}}">Your Profile</a></li>
+                <li><a href="{{route('profiles.password.view')}}">Change Password</a></li>
+            </ul>
+        </li>
+        <li><a><i class="fa fa-clone"></i>Users <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{{route('users.index')}}">View User</a></li>
+            </ul>
+        </li>
         <li><a><i class="fa fa-clone"></i>Brands <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-               
                 <li><a href="{{route('brands.index')}}">View Brand</a></li>
             </ul>
         </li>
