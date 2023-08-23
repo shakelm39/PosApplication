@@ -67,30 +67,30 @@ $(document).ready(function () {
         //Edit function
         $(document).on("click", ".supEditBtn", function (e) {
             e.preventDefault();
-
-            var id = $(this).data("id");
             $("#editModal").modal("show");
-            //console.log(id);
+            var editId = $(this).data("id");
+            
+          //console.log(editId);
 
             $.ajax({
                 url: "edit",
                 type: "GET",
                 dataType: "json",
-                data: { id: id },
+                data: { 'id': editId },
                 success: function (res) {
-                    console.log(res.category);
-                    $('input[name="updateId"]').val(res.category.id);
-                    $('input[name="updatename"]').val(res.category.name);
-                    $('input[name="updatemobile_no"]').val(res.category.mobile_no);
-                    $('input[name="updateemail"]').val(res.category.email);
-                    $('textarea[name="updateaddress"]').val(res.category.address);
-                    $('select[name="updateStatus"]').val(res.category.status);
+                   
+                    $('#id').val(res.data.id);
+                    $('input[name="updatename"]').val(res.data.name);
+                    $('input[name="updatemobile_no"]').val(res.data.mobile_no);
+                    $('input[name="updateemail"]').val(res.data.email);
+                    $('textarea[name="updateaddress"]').val(res.data.address);
+                    $('select[name="updateStatus"]').val(res.data.status);
 
-                    if (res.category.status == 1) {
+                    if (res.data.status == 1) {
                         //1 means published
-                        $("#upStatus").find(":selected").val(res.category.status);
+                        $("#upStatus").find(":selected").val(res.data.status);
                     } else {
-                        $("#upStatus").find(":selected").val(res.category.status);
+                        $("#upStatus").find(":selected").val(res.data.status);
                     }
                 },
             });

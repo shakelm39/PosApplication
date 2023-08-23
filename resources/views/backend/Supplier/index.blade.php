@@ -42,11 +42,12 @@
                                                     <span class="badge badge-warning p-2"><strong>Pending</strong></span>
                                                 @endif
                                             </td>
-                                            @php
-                                                $count_supplier = App\Models\Product::where('supplier_id',$supplier->id)->count();
-                                            @endphp
+                                                @php
+                                                    $count_supplier = App\Models\Product::where('supplier_id',$supplier->id)->count();
+                                                @endphp
                                             <td>
                                                 <button type="button" data-id="{{$supplier->id}}" class="btn btn-sm btn-success supEditBtn"><i class="fa fa-edit"></i></button>
+                                                
                                                 @if($count_supplier<1)
                                                  <button type="button" data-id="{{$supplier->id}}" class="btn btn-sm btn-danger supDelBtn"><i class="fa fa-trash"></i></button>
                                                 @endif
@@ -116,9 +117,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="errorMsg"></div>
-                        <form action="" method="post" id="supEditFrom" class="updateFrom">
+                        <form id="supEditFrom" class="updateFrom">
                             @csrf
-                            <input type="hidden" id="id" name="updateId">
+                            <input type="text" id="id" name="updateId">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" name="updatename"  class="form-control" id="Up_name" aria-describedby="name">

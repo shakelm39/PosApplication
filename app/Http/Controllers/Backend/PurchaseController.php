@@ -8,11 +8,11 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Purchase;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseController extends Controller
 {
@@ -159,17 +159,18 @@ class PurchaseController extends Controller
             // dd($request->all());
              $startDate          = date('Y-m-d',strtotime($request->start_date));
              $endDate            = date('Y-m-d',strtotime($request->end_date));
-             $data['allData']    = Purchase::whereBetween('date',[$startDate,$endDate])->where('status','1')->orderBy('supplier_id')->orderBy('category_id')->orderBy('product_id')->get();$data['start_date'] = date('Y-m-d',strtotime($request->start_date));
+             $data['allData']    = Purchase::whereBetween('date',[$startDate,$endDate])
+                                    ->where('status','1')->orderBy('supplier_id')
+                                    ->orderBy('category_id')
+                                    ->orderBy('product_id')
+                                    ->get();
+             $data['start_date'] = date('Y-m-d',strtotime($request->start_date));
              $data['end_date']   = date('Y-m-d',strtotime($request->end_date));
 
-             $pdf                = PDF::loadView('backend.pdf.daily-purchase-report-pdf',$data);
-             
-             //$pdf->SetProtection(['copy', 'print'], '', 'pass');
+            //  $pdf                = PDF::loadView('backend.pdf.daily-purchase-report-pdf',$data)->setOptions(['defaultFont' => 'sans-serif']);
             //  return $pdf->stream('document.pdf');
-             return $pdf->download('backend.pdf.daily-purchase-report-pdf');
-         
             
-          
+            return view('backend.pdf.daily-purchase-report-pdf',$data);
             
         }
 

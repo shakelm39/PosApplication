@@ -80,7 +80,7 @@ class SupplierController extends Controller
         $data = Supplier::find($request->id);
 
         return response()->json([
-            'data'=>$data
+            'data'=>$data,
         ]);
         
     }
