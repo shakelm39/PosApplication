@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\SupplierController;
 
@@ -75,26 +76,27 @@ Route::group(['middleware'=>'auth'],function(){
 		Route::post('/update', 		[SupplierController::class,'update'])->name('suppliers.update');
 		Route::get('/delete', 		[SupplierController::class,'destroy'])->name('suppliers.delete');
 	});
-// //Customers group
-// 	Route::prefix('customers')->group(function(){
 
-// 		Route::get('/view', 'Backend\CustomerController@view')->name('customers.view');
-// 		Route::get('/add', 'Backend\CustomerController@add')->name('customers.add');
-// 		Route::post('/store', 'Backend\CustomerController@store')->name('customers.store');
-// 		Route::get('/edit/{id}', 'Backend\CustomerController@edit')->name('customers.edit');
-// 		Route::post('/update/{id}', 'Backend\CustomerController@update')->name('customers.update');
-// 		Route::get('/delete/{id}', 'Backend\CustomerController@delete')->name('customers.delete');
-// 		Route::get('/credit', 'Backend\CustomerController@creditCustomer')->name('customers.credit');
-// 		Route::get('/credit/pdf', 'Backend\CustomerController@creditCustomerPdf')->name('customers.credit.pdf');
-// 		Route::get('/invoice/edit/{invoice_id}', 'Backend\CustomerController@editInvoice')->name('customers.edit.invoice');
-// 		Route::post('/invoice/update/{invoice_id}', 'Backend\CustomerController@updateInvoice')->name('customers.update.invoice');
-// 		Route::get('/invoice/details/pdf/{invoice_id}', 'Backend\CustomerController@invoiceDetailsPdf')->name('invoice.details.pdf');
-// 		Route::get('/paid', 'Backend\CustomerController@paidCustomer')->name('customers.paid');
-// 		Route::get('/paid/pdf', 'Backend\CustomerController@paidCustomerPdf')->name('customers.paid.pdf');
-// 		Route::get('/wise/report', 'Backend\CustomerController@customerWiseReport')->name('customers.wise.report');
-// 		Route::get('/wise/credit/report', 'Backend\CustomerController@customerWiseCredit')->name('customers.wise.credit.report');
-// 		Route::get('/wise/paid/report', 'Backend\CustomerController@customerWisePaid')->name('customers.wise.paid.report');
-// 	});
+//Customers group
+	Route::prefix('customers')->group(function(){
+
+		Route::get('/view', 							[CustomerController::class,'view'])->name('customers.view');
+		Route::get('/add', 								[CustomerController::class,'add'])->name('customers.add');
+		Route::post('/store', 							[CustomerController::class,'store'])->name('customers.store');
+		Route::get('/edit/{id}', 						[CustomerController::class,'edit'])->name('customers.edit');
+		Route::post('/update/{id}', 					[CustomerController::class,'update'])->name('customers.update');
+		Route::get('/delete/{id}', 						[CustomerController::class,'delete'])->name('customers.delete');
+		Route::get('/credit', 							[CustomerController::class,'creditCustomer'])->name('customers.credit');
+		Route::get('/credit/pdf', 						[CustomerController::class,'creditCustomerPdf'])->name('customers.credit.pdf');
+		Route::get('/invoice/edit/{invoice_id}', 		[CustomerController::class,'editInvoice'])->name('customers.edit.invoice');
+		Route::post('/invoice/update/{invoice_id}', 	[CustomerController::class,'updateInvoice'])->name('customers.update.invoice');
+		Route::get('/invoice/details/pdf/{invoice_id}', [CustomerController::class,'invoiceDetailsPdf'])->name('invoice.details.pdf');
+		Route::get('/paid', 							[CustomerController::class,'paidCustomer'])->name('customers.paid');
+		Route::get('/paid/pdf', 						[CustomerController::class,'paidCustomerPdf'])->name('customers.paid.pdf');
+		Route::get('/wise/report', 						[CustomerController::class,'customerWiseReport'])->name('customers.wise.report');
+		Route::get('/wise/credit/report', 				[CustomerController::class,'customerWiseCredit'])->name('customers.wise.credit.report');
+		Route::get('/wise/paid/report', 				[CustomerController::class,'customerWisePaid'])->name('customers.wise.paid.report');
+	});
 
 //Units group
 	Route::prefix('units')->group(function(){

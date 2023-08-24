@@ -45,7 +45,23 @@
     <!-- bootstrap-daterangepicker -->
     <script src="{{asset('public/backend')}}/vendors/moment/min/moment.min.js"></script>
     <script src="{{asset('public/backend')}}/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
+    <!-- Datatables -->
+    <script src="{{asset('public/backend')}}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="{{asset('public/backend')}}/vendors/pdfmake/build/vfs_fonts.js"></script>
+       <!-- Datatables end-->
     <!-- Custom Theme Scripts -->
     <script src="{{asset('public/backend')}}/build/js/custom.min.js"></script>
     <!-- custom main js  -->
@@ -93,9 +109,9 @@
     </script>
     <!-- image showing script end -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      //Tostr alert
+      <!-- Tostr alert -->
         <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-        {!! Toastr::message() !!}
+        <!-- {!! Toastr::message() !!} -->
         <script src="{{asset('public/backend')}}/build/js/main.js"></script>
 
   </body>

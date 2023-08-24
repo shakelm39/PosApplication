@@ -11,6 +11,7 @@ class DefaultController extends Controller
     public function getCategory(Request $request){
     	$supplier_id = $request->supplier_id;
     	$allCategory = Product::with(['category'])->select('category_id')->where('supplier_id',$supplier_id)->groupBy('category_id')->get();
+       
     	return response()->json($allCategory);
     }
     public function getBrand(Request $request){

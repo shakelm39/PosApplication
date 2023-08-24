@@ -36,6 +36,14 @@
                 <li><a href="{{route('suppliers.index')}}">View Supplier</a></li>
             </ul>
         </li>
+        <li><a><i class="fa fa-clone"></i>Customer <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{{route('customers.view')}}">View Customer</a></li>
+                <li><a href="{{route('customers.credit')}}">Credit Customers</a></li>
+                <li><a href="{{route('customers.paid')}}">Paid Customers</a></li>
+                <li><a href="{{route('customers.wise.report')}}">Customers Wise Report</a></li>
+            </ul>
+        </li>
         <li><a><i class="fa fa-clone"></i>Product <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
                 <li><a href="{{route('products.index')}}">View Products</a></li>
@@ -50,6 +58,7 @@
         </li>
         <li><a><i class="fa fa-clone"></i>Manage Invoice <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
+                <li><a href="{{route('invoice.view')}}">View Invoice</a></li>
                 <li><a href="{{route('invoice.pending.list')}}">Approval Invoice</a></li>
                 <li><a href="{{route('invoice.print.list')}}">Print Invoice</a></li>
                 <li><a href="{{route('invoice.daily.report')}}">Daily Invoice Report</a></li>

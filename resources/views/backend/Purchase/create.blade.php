@@ -148,14 +148,17 @@
 		</td>
 	</tr>
 </script>
+
+
 <script type="text/javascript">
 	//select category 
 
 	$(document).ready(function(){
+
 		
-  		$(document).on('change','#supplier_id',function(){
+  		//Category add
+		  $(document).on('change','#supplier_id',function(){
   			var supplier_id = $(this).val();
-            console.log(supplier_id);
   			$.ajax({
   				url:"{{route('purchase.get-category')}}",
   				type:'GET',
@@ -173,9 +176,6 @@
 		//category select end
 
 		// select brand start 
-		
-//select brand 
-  
 	
 			$(document).on('change','#product_id',function(){
 				var product_id = $(this).val();

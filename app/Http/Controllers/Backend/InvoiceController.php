@@ -19,12 +19,15 @@ use Illuminate\Support\Facades\Auth;
 class InvoiceController extends Controller
 {
     //Invoice View
-    public function view(){
+    public function view()
+	{
     	$allData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','1')->get();
     	return view('backend.invoice.view-invoice',compact('allData'));
     }
+
 	//Invoice Add
-    public function add(){
+    public function add()
+	{
     	$data['brands'] = Brand::all();
     	$data['categories'] = Category::all();
     	$invoice_data = Invoice::orderBy('id','desc')->first();
@@ -40,9 +43,12 @@ class InvoiceController extends Controller
     	$data['date'] = date('Y-m-d');
     	return view('backend.invoice.add-invoice',$data);
     }
+
 	//Invoice Store
-	  public function store(Request $request){
-	    if ($request->category_id == null) {
+	  public function store(Request $request)
+	  {
+		
+	    if ($request->category_ids == null) {
 	        return redirect()->back()->with('error','sorry! You do not select any item');
 	    }else{
 	    	if ($request->paid_amount>$request->estimated_amount) {
@@ -56,25 +62,30 @@ class InvoiceController extends Controller
 	    		$invoice->status ='0';
 	    		$invoice->created_by = Auth::user()->id;
 	    		$invoice->save();
+
 	    		//invoice details table
 	    		DB::transaction(function() use($request,$invoice){
-	    			if($invoice->save()){
-	    				$count_category = count($request->category_id);
-	    				for ($i=0; $i <$count_category; $i++) { 
+	    			if($invoice->save())
+					{
+	    				$count_category = count($request->category_ids);
+	    				for ($i=0; $i <$count_category; $i++) 
+						{ 
 	    					$invoice_details 				= new InvoiceDetails();
 	    					$invoice_details->date 			= date('Y-m-d',strtotime($request->date));
 	    					$invoice_details->invoice_id 	= $invoice->id;
-	    					$invoice_details->category_id	= $request->category_id[$i];
-	    					$invoice_details->brand_id		= $request->brand_id[$i];
-	    					$invoice_details->product_id	= $request->product_id[$i];
+	    					$invoice_details->category_id	= $request->category_ids[$i];
+	    					$invoice_details->brand_id		= $request->brand_ids[$i];
+	    					$invoice_details->product_id	= $request->product_ids[$i];
 	    					$invoice_details->selling_qty	= $request->selling_qty[$i];
 	    					$invoice_details->unit_price	= $request->unit_price[$i];
 	    					$invoice_details->selling_price	= $request->selling_price[$i];
 	    					$invoice_details->status 		= '0';
 	    					$invoice_details->save();
 	    				}
+
 	    				//customer table
-	    				if ($request->customer_id =='0') {
+	    				if ($request->customer_id =='0') 
+						{
 	    					$customer 				= new Customer();
 	    					$customer->name 		= $request->name;
 	    					$customer->mobile_no 	= $request->mobile_no;
@@ -84,6 +95,7 @@ class InvoiceController extends Controller
 	    				}else{
 	    					$customer_id 			= $request->customer_id;
 	    				}
+
 	    				//payment table
 		    				$payment 					= new Payment();
 		    				$payment_details 			= new PaymentDetails();
@@ -119,19 +131,26 @@ class InvoiceController extends Controller
     }
     return redirect()->route('invoice.view')->with('success','Data Save Successfull!!');
   }
+
 //Invoice pending approval function
-  public function pendingList(){
-       $allData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
-    	return view('backend.invoice.pending-invoice-list',compact('allData'));
+  public function pendingList()
+  {
+       $invoiceData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
+	
+    	return view('backend.invoice.pending-invoice-list',compact('invoiceData'));
     }
 //Invoice approval function
-  public function approve($id){
+  public function approve($id)
+  {
         $invoice = Invoice::with(['invoice_details'])->find($id);
         return view('backend.invoice.invoice-approve',compact('invoice'));
     }
+
     //Invoice approval function
-  public function approvalStore(Request $request,$id){
-        foreach ($request->selling_qty as $key => $val){
+  public function approvalStore(Request $request,$id)
+  {
+        foreach ($request->selling_qty as $key => $val)
+		{
         	$invoice_details = InvoiceDetails::where('id',$key)->first();
         	$product = Product::where('id',$invoice_details->product_id)->first();
         	if($product->quantity<$request->selling_qty[$key]){
@@ -143,7 +162,8 @@ class InvoiceController extends Controller
         $invoice->status = '1';
         
         DB::transaction(function() use ($request, $invoice, $id){
-        	foreach($request->selling_qty as $key => $val){
+        	foreach($request->selling_qty as $key => $val)
+			{
         		$invoice_details = InvoiceDetails::where('id',$key)->first();
         		$invoice_details->status='1';
         		$invoice_details->save();
@@ -158,7 +178,8 @@ class InvoiceController extends Controller
     }
 
 //Invoice Delete Function
-  public function delete($id){
+  public function delete($id)
+  {
    $invoice = Invoice::find($id);
    $invoice->delete();
    InvoiceDetails::where('invoice_id',$invoice->id)->delete();
@@ -166,7 +187,8 @@ class InvoiceController extends Controller
    PaymentDetails::where('invoice_id',$invoice->id)->delete();
    return redirect()->route('invoice.pending.list')->with('success',"Data Deleted Successfully!!");
   }
-  public function printInvoiceList(){
+  public function printInvoiceList()
+  {
   	$allData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','1')->get();
     	return view('backend.invoice.pos-invoice-list',compact('allData'));
   }
@@ -174,27 +196,32 @@ class InvoiceController extends Controller
 
 	
   //Invoice Pdf
-	function printInvoice($id) {
+	function printInvoice($id) 
+	{
 		$data['invoice'] = Invoice::with(['invoice_details'])->find($id);
 		$pdf = PDF::loadView('backend.pdf.invoice-pdf', $data);
-		$pdf->SetProtection(['copy', 'print'], '', 'pass');
-		return $pdf->stream('document.pdf');
+		//$pdf->SetProtection(['copy', 'print'], '', 'pass');
+		//return $pdf->stream('Spkinvoice.pdf');
+		return view('backend.pdf.invoice-pdf',$data);
 	}
 
 //Daily Invoice report
-	public function dailyReport(){
+	public function dailyReport()
+	{
 		return view('backend.invoice.daily-invoice-report');
 	}
 //Daily Invoice report
-	public function dailyReportPdf(Request $request){
+	public function dailyReportPdf(Request $request)
+	{
 		$startDate 			= date('Y-m-d',strtotime($request->start_date));
 		$endDate 			= date('Y-m-d',strtotime($request->end_date));
 		$data['allData'] 	= Invoice::whereBetween('date',[$startDate,$endDate])->where('status','1')->get();
 		$data['start_date'] = date('Y-m-d',strtotime($request->start_date));
 		$data['end_date'] 	= date('Y-m-d',strtotime($request->end_date));
-		$pdf 				= PDF::loadView('backend.pdf.daily-invoice-report-pdf', $data);
-		$pdf->SetProtection(['copy', 'print'], '', 'pass');
-		return $pdf->stream('document.pdf');
+		//$pdf 				= PDF::loadView('backend.pdf.daily-invoice-report-pdf', $data);
+		//$pdf->SetProtection(['copy', 'print'], '', 'pass');
+		//return $pdf->download('document.pdf');
+		return view('backend.pdf.daily-invoice-report-pdf', $data);
 		
 	}
 
