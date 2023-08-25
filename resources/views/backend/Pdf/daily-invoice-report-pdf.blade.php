@@ -93,7 +93,7 @@
 											
 											<tr>
 											<td colspan="5" style="text-align: right;">Grand Total =</td>
-											<td style="text-align: center;">{{$total_sum}}/-Tk</td>
+											<td>{{$total_sum}}/-Tk</td>
 											</tr>
 										</tbody>
 									</table>
